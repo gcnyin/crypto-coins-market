@@ -22,7 +22,7 @@ lazy val root = (project in file("."))
 
 import com.typesafe.sbt.packager.docker.{DockerChmodType, DockerPermissionStrategy}
 
-dockerBaseImage := "openjdk:15-jdk-buster"
+dockerBaseImage := "openjdk:11-jdk"
 dockerChmodType := DockerChmodType.UserGroupWriteExecute
 dockerPermissionStrategy := DockerPermissionStrategy.CopyChown
 dockerExposedPorts ++= Seq(9000)
