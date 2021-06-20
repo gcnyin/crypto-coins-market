@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  web:
+    image: crypto-coins-market
+    restart: always
+    ports:
+      - 9000:9000
+    networks:
+      - database
+    depends_on:
+      - postgres
+    environment:
+      - DB_JDBC_URL=jdbc:postgresql://postgres:5432/test_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=12345
+      - JAVA_OPTS=${JAVA_OPTS}
+  postgres:
+    image: postgres:13.3-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - database
+    environment:
+      - POSTGRES_DB=test_db
+      - POSTGRES_PASSWORD=12345
+networks:
+  database:
