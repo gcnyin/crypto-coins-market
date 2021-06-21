@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web:
-    image: crypto-coins-market
+    image: ghcr.io/gcnyin/crypto-coins-market:0.1.0
     restart: always
     ports:
       - 9001:9000
