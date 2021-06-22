@@ -11,17 +11,19 @@ services:
     depends_on:
       - postgres
     environment:
-      - DB_JDBC_URL=jdbc:postgresql://postgres:5432/test_db
+      - DB_JDBC_URL=jdbc:postgresql://postgres:5432/market
       - DB_USERNAME=postgres
-      - DB_PASSWORD=12345
+      - DB_PASSWORD=12345678
       - JAVA_OPTS=${JAVA_OPTS}
   postgres:
     image: postgres:13.3-alpine
     restart: always
+    ports:
+      - 5432:5432
     networks:
       - database
     environment:
-      - POSTGRES_DB=test_db
-      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=market
+      - POSTGRES_PASSWORD=12345678
 networks:
   database:

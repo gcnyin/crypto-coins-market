@@ -12,12 +12,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class WsController @Inject()(cc: ControllerComponents, userService: UserService)(implicit system: ActorSystem, mat: Materializer, ec: ExecutionContext)
-  extends AbstractController(cc)
+class WsController @Inject() (cc: ControllerComponents, userService: UserService)(implicit
+    system: ActorSystem,
+    mat: Materializer,
+    ec: ExecutionContext
+) extends AbstractController(cc)
     with Logging {
 
   def socket: WebSocket = WebSocket.acceptOrResult[String, String] { request =>
-    val handler = request.getQueryString("token")
+    val handler = request
+      .getQueryString("token")
       .flatMap(userService.extractUsernameFromJws) match {
       case Some(username) =>
         Right(ActorFlow.actorRef { out =>

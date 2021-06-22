@@ -8,17 +8,15 @@ import scala.concurrent.duration.DurationInt
 
 object CounterSocketActor {
   def props(out: ActorRef, username: String)(implicit
-      executionContext: ExecutionContext,
-      actorSystem: ActorSystem
+      executionContext: ExecutionContext
   ): Props = Props(new CounterSocketActor(out, username))
 }
 
 class CounterSocketActor(out: ActorRef, username: String)(implicit
-    executionContext: ExecutionContext,
-    actorSystem: ActorSystem
+    executionContext: ExecutionContext
 ) extends Actor {
   private val scheduleTask: Cancellable =
-    actorSystem.scheduler.scheduleAtFixedRate(initialDelay = 5.seconds, interval = 10.seconds) { () =>
+    context.system.scheduler.scheduleAtFixedRate(initialDelay = 5.seconds, interval = 10.seconds) { () =>
       out ! Json.obj("message" -> "ping").toString()
     }
 
