@@ -1,0 +1,2 @@
+sbt scalafmtAll
+git add .

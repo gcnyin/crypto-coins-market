@@ -1,14 +1,17 @@
 package models
 
-case class Order(var id: Long, accountId: Long, symbol: Symbol)
+case class PreOrder(accountId: Long, symbol: Symbol)
+
+sealed abstract class Order(id: Long, accountId: Long, symbol: Symbol)
 
 case class Limit(
-    override var id: Long,
-    override val accountId: Long,
-    override val symbol: Symbol,
+    id: Long,
+    accountId: Long,
+    symbol: Symbol,
     price: BigDecimal,
     quantity: Long,
     amount: BigDecimal,
     surplus: Long,
-    knockdown: Long
+    knockdown: Long,
+    a: Option[Long]
 ) extends Order(id, accountId, symbol)

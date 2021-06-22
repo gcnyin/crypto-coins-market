@@ -1,5 +1,6 @@
 name := """crypto-coins-market"""
 organization := "com.github.gcnyin"
+maintainer := "guchounongyin@gmail.com"
 
 version := "0.1.0"
 scalaVersion := "2.13.6"
