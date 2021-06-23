@@ -7,5 +7,5 @@ import scala.concurrent.Future
 
 @Singleton
 class SequenceService @Inject() (sequenceRepository: SequenceRepository) {
-  def nextVal: Future[Option[Long]] = sequenceRepository.nextVal
+  def nextVal: Future[Long] = sequenceRepository.nextVal
 }

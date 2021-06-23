@@ -13,9 +13,9 @@ class SequenceRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   import dbConfig._
   import profile.api._
 
-  def nextVal: Future[Option[Long]] = db
+  def nextVal: Future[Long] = db
     .run {
       sql"select nextval('default_sequence')".as[Long]
     }
-    .map(_.headOption)
+    .map(_.head)
 }
