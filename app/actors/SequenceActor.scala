@@ -1,38 +1,55 @@
 package actors
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import services.SequenceService
 
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
+import java.util
+import scala.concurrent.ExecutionContextExecutor
 
 object SequenceActor {
   object NextValue
+
+  case class NewNextValue(v: Long)
 }
 
 class SequenceActor(sequenceService: SequenceService) extends Actor {
 
   import SequenceActor._
 
+  private implicit val ec: ExecutionContextExecutor = context.dispatcher
+
   private val step = 10000L
 
-  private val start = -1L
-  private val end = 0L
-  private val current = 0L
+  private var start = -1L
+  private var end = 0L
+  private var current = 0L
+  private var fetchingFlag = false
+  private val waitingList = new util.LinkedList[ActorRef]()
 
-  def receive: Receive = onMessage(start, end, current)
-
-  private def onMessage(start: Long, end: Long, current: Long): Receive = { case NextValue =>
-    if (start == -1) {
-      val nextVal = Await.result(sequenceService.nextVal, 500.millis)
-      context.become(onMessage(0, step * nextVal, current))
-    }
-    if (current == (end - 1)) {
-      val nextVal = Await.result(sequenceService.nextVal, 500.millis)
-      val newStart = (nextVal - 1) * step
-      context.become(onMessage(newStart, nextVal * step, newStart))
-    }
-    sender ! current
-    context.become(onMessage(start, end, current + 1))
+  def receive: Receive = {
+    case NewNextValue(newNextVal) =>
+      start = newNextVal * step
+      end = newNextVal * (step + 1)
+      current = start
+      waitingList.forEach { it =>
+        it ! current
+        current += 1
+      }
+      waitingList.clear()
+      fetchingFlag = false
+    case NextValue =>
+      if (current == (end - 1)) {
+        if (!fetchingFlag) {
+          fetchingFlag = true
+          sequenceService.nextVal.onComplete { it =>
+            it.map(nextVal => NewNextValue(nextVal))
+              .map(self ! _)
+          }
+        } else {
+          waitingList.add(sender())
+        }
+      }
+      sender ! current
+      current += 1
   }
 }
