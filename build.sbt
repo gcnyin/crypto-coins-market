@@ -11,6 +11,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       guice,
       ws,
+      caffeine,
       "com.typesafe.play" %% "play-slick" % "5.0.0",
       "org.flywaydb" %% "flyway-play" % "7.10.0",
       "org.springframework.security" % "spring-security-crypto" % "5.5.0",
