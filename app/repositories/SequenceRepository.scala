@@ -1,5 +1,6 @@
 package repositories
 
+import actors.SequenceActor.NextStart
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -13,9 +14,9 @@ class SequenceRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   import dbConfig._
   import profile.api._
 
-  def nextVal: Future[Long] = db
+  def nextVal: Future[NextStart] = db
     .run {
       sql"select nextval('default_sequence')".as[Long]
     }
-    .map(_.head)
+    .map(it => NextStart(it.head))
 }
