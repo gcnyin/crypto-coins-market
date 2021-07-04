@@ -16,7 +16,9 @@ lazy val root = (project in file("."))
       "org.flywaydb" %% "flyway-play" % "7.10.0",
       "org.springframework.security" % "spring-security-crypto" % "5.5.0",
       "org.postgresql" % "postgresql" % "42.2.21" % Runtime,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+      "org.scalatestplus" %% "mockito-3-4" % "3.2.9.0" % Test,
+      "com.typesafe.akka" %% "akka-testkit" % "2.6.14" % Test
     ),
     scalaVersion := "2.13.6")
   .enablePlugins(PlayScala)

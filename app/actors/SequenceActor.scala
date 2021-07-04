@@ -1,6 +1,6 @@
 package actors
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, Props}
 import akka.pattern.pipe
 import services.SequenceService
 
@@ -10,6 +10,8 @@ import scala.util.control.Breaks
 import scala.util.control.Breaks.break
 
 object SequenceActor {
+  def props(sequenceService: SequenceService): Props = Props(new SequenceActor(sequenceService))
+
   object Initialize
 
   case class NextStart(start: Long)
@@ -43,7 +45,7 @@ class SequenceActor(sequenceService: SequenceService) extends Actor {
   /**
    * sequenceService.nextStart: () => NextStart
    *
-   * @return
+   * @return 返回一个单调递增的ID
    */
   def receive: Receive = {
     case Initialize => sequenceService.nextStart.pipeTo(sender())
