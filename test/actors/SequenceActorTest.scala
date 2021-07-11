@@ -22,12 +22,10 @@ class SequenceActorTest
       import SequenceActor._
 
       val sequenceService = mock[SequenceService]
-      when(sequenceService.nextStart).thenReturn(Future.successful(NextStart(1)))
+      when(sequenceService.nextStart).thenReturn(Future.successful(1))
       val sequenceActorRef = system.actorOf(props(sequenceService))
       sequenceActorRef ! NextValue
-      expectMsg(NextValueResult(1))
-      sequenceActorRef ! NextValue
-      expectMsg(NextValueResult(2))
+      expectMsg(1L)
     }
   }
 }

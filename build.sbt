@@ -24,6 +24,8 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .disablePlugins(PlayFilters)
 
+Test / javaOptions += "-Dconfig.file=conf/application.test.conf"
+
 import com.typesafe.sbt.packager.docker.{DockerChmodType, DockerPermissionStrategy}
 
 dockerBaseImage := "openjdk:11-jdk"
